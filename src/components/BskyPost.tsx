@@ -9,6 +9,7 @@ interface Props {
   handleModalContent: any;
   isCard?: boolean;
   dateFormat?: DateFormat
+  loadImages?: boolean;
 }
 
 const BskyPost: Component<Props> = ({
@@ -17,6 +18,7 @@ const BskyPost: Component<Props> = ({
   handleModalContent,
   isCard = false,
   dateFormat,
+  loadImages = false,
 }: Props) => {
   let videoRef: HTMLVideoElement | undefined;
 
@@ -44,7 +46,7 @@ const BskyPost: Component<Props> = ({
             <span class="mx-1">·</span>
             <a href={`https://bsky.app/profile/${post.handle}/post/${getContentAfterLastSlash(post.uri)}`} class="hover:underline" target={linkTarget} rel={linkTarget === '_blank' ? 'noopeener' : ''}>
               { dateFormat && dateFormat.type === 'absolute'
-                ? new Date(post.createdAt).toLocaleDateString(dateFormat.locale, dateFormat.options)
+                ? new Date(post.createdAt).toLocaleDateString(dateFormat.locale, dateFormat.options as any)
                 : timeDifference(new Date(post.createdAt)) }
             </a>
           </span>
@@ -56,7 +58,7 @@ const BskyPost: Component<Props> = ({
             : <span>{t.val}</span>)}
         </p>
 
-        { post.images.length > 0 && <div class={post.images.length > 1 ? "mt-4 grid grid-cols-2 gap-2" : "mt-4"}>
+        { post.images.length > 0 && loadImages && <div class={post.images.length > 1 ? "mt-4 grid grid-cols-2 gap-2" : "mt-4"}>
           { post.images.map((image: { thumb: string | undefined; alt: string | undefined; }) =>
             <a
               href={`https://bsky.app/profile/${post.handle}/post/${getContentAfterLastSlash(post.uri)}`}
